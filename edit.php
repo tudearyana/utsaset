@@ -1,0 +1,76 @@
+<?php
+// Include koneksi database
+include('koneksi.php');
+
+// Ambil ID aset dari URL
+$id_aset = $_GET['id_aset'];
+
+// Query untuk mengambil data aset berdasarkan ID
+$query = "SELECT * FROM tbl_aset WHERE id_aset = $id_aset";
+$result = mysqli_query($connection, $query);
+$data = mysqli_fetch_assoc($result);
+
+// Jika data tidak ditemukan
+if (!$data) {
+    echo "Data tidak ditemukan!";
+    exit;
+}
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Data Aset</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h2>Edit Data Aset</h2>
+        <form action="update.php" method="POST">
+            <!-- Menyimpan ID aset yang akan diedit -->
+            <input type="hidden" name="id_aset" value="<?php echo $data['id_aset']; ?>">
+
+            <div class="mb-3">
+                <label for="nama_aset" class="form-label">Nama Aset</label>
+                <input type="text" class="form-control" id="nama_aset" name="nama_aset"
+                    value="<?php echo $data['nama_aset']; ?>" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="deskripsi_aset" class="form-label">Deskripsi Aset</label>
+                <textarea class="form-control" id="deskripsi_aset" name="deskripsi_aset"
+                    rows="3"><?php echo $data['deskripsi_aset']; ?></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label for="jenis_aset" class="form-label">Jenis Aset</label>
+                <input type="text" class="form-control" id="jenis_aset" name="jenis_aset"
+                    value="<?php echo $data['jenis_aset']; ?>" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="status" class="form-label">Status Aset</label>
+                <select class="form-select" id="status" name="status" required>
+                    <option value="Baik" <?php echo ($data['status'] == 'Baik') ? 'selected' : ''; ?>>Baik</option>
+                    <option value="Rusak" <?php echo ($data['status'] == 'Rusak') ? 'selected' : ''; ?>>Rusak</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="lokasi" class="form-label">Lokasi</label>
+                <input type="text" class="form-control" id="lokasi" name="lokasi" value="<?php echo $data['lokasi']; ?>"
+                    required>
+            </div>
+
+            <button type="submit" class="btn btn-success">Update</button>
+            <a href="index.php" class="btn btn-secondary">Batal</a>
+        </form>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
